@@ -1,0 +1,210 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Puship</title>
+	<script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+	<script type="text/javascript" charset="utf-8" src="PushipNotification.js"></script>
+	<script>
+		document.addEventListener("deviceready", onDeviceReady, false);
+		function onDeviceReady() {
+			console.log("Device ready!");
+			
+			//Puship.PushipAppId = "jS0oE8PtHcVarde"; // Global setting Puship Application ID
+			Puship.PushipAppId = "p6c8635VsgwOEZx"; // Global setting Puship Application ID
+			
+			//var GCMCode = "256166004608"; // this is The google senderID
+			var GCMCode = "165458017569"; // this is The google senderID
+			
+			
+			
+			if (Puship.Common.GetCurrentOs()==Puship.OS.ANDROID){
+				Puship.GCM.Register(GCMCode,
+						{
+							successCallback: function (regresult){
+				                console.log("device registed");
+				                console.log('DeviceToken: ' + regresult.DeviceToken); //Use this if you want manage push aautonomously
+				                console.log('DeviceId: ' + regresult.DeviceId); //Use this for send push notification from Puship Api
+				                alert("device registed");
+				                
+							},
+							failCallback: function (regresult){
+								console.warn("error during registration: "+ regresult);
+								alert("error during registration: "+ regresult);
+							}
+						});
+			}
+				
+			
+			
+			Puship.Common.OnPushReceived(function(event) {
+				
+				console.log('push received');
+				
+				try
+				{
+					alert(event.notification.Alert);
+				}
+				catch(err)
+				{
+					console.warn("Cannot display alert in background");
+				}
+		   	});
+			
+		}
+		
+		function getPushByCurrentPosition(){
+			Puship.Common.GetPushMessages(
+                	{
+					//limit: 10, //max limit is 50 default is 20
+   					//offset: 100,
+   					byCurrentPosition: true,
+					successCallback: function (regresult){
+		                console.log("GetPushMessages done");
+		                
+		                if (regresult.length>0)
+	                	{
+		                	alert("Message 1 of "+regresult.length+": "+regresult[0].Message);
+	                	}else{
+	                		alert("No message found");
+	                	}
+					},
+					failCallback: function (regresult){
+						console.warn("error during GetPushMessages by Pos: "+ regresult);
+						alert("error during GetPushMessages by Pos: "+ regresult);
+					}
+				});
+		}
+		
+		function getPush(){
+			Puship.Common.GetPushMessages(
+                	{
+					//limit: 10, //max limit is 50 default is 20
+   					//offset: 100,
+					successCallback: function (regresult){
+		                console.log("GetPushMessages done");
+		                
+		                if (regresult.length>0)
+	                	{
+		                	alert("Message 1 of "+regresult.length+": "+regresult[0].Message);
+	                	}else{
+	                		alert("No message found");
+	                	}
+					},
+					failCallback: function (regresult){
+						console.warn("error during GetPushMessages: "+ regresult);
+						alert("error during GetPushMessages: "+ regresult);
+					}
+				});
+		}
+		
+		function getPushByLibra(){
+			Puship.Common.GetPushMessages(
+                	{
+					//limit: 10, //max limit is 50 default is 20
+   					//offset: 100,
+   					tag: "Libra",
+					successCallback: function (regresult){
+		                console.log("GetPushMessages done");
+		                
+		                if (regresult.length>0)
+	                	{
+		                	alert("Message 1 of "+regresult.length+": "+regresult[0].Message);
+	                	}else{
+	                		alert("No message found");
+	                	}
+					},
+					failCallback: function (regresult){
+						console.warn("error during GetPushMessages: "+ regresult);
+						alert("error during GetPushMessages: "+ regresult);
+					}
+				});
+		}
+		
+		function getPushByDevice(){
+			Puship.Common.GetPushMessagesByDevice(
+                	{
+					//limit: 10, //max limit is 50 default is 20
+   					//offset: 100,
+					successCallback: function (regresult){
+		                console.log("GetPushMessagesByDevice done");
+		                
+		                if (regresult.length>0)
+	                	{
+		                	alert("Message 1 of "+regresult.length+": "+regresult[0].Message);
+	                	}else{
+	                		alert("No message found");
+	                	}
+					},
+					failCallback: function (regresult){
+						console.warn("error during GetPushMessagesByDevice: "+ regresult);
+						alert("error during GetPushMessagesByDevice: "+ regresult);
+					}
+				});
+		}
+		
+		function addLibraFilter(){
+			console.log("addLibraFilter");
+			Puship.Common.AddTagFilter("Libra");
+		}
+		function addVirgoFilter(){
+			console.log("addVirgoFilter");
+			Puship.Common.AddTagFilter("Virgo");
+		}
+		function removeFilter(){
+			console.log("removeFilter");
+			Puship.Common.RemoveTagFilter("Libra");
+		}
+		function clearFilters(){
+			console.log("removeFilter");
+			Puship.Common.CleanTagFilter();
+		}
+		function getFilters(){
+			Puship.Common.GetTagFilters(
+                	{
+					successCallback: function (regresult){
+		                console.log("GetTagFilters done");
+		                
+		                if (regresult.length>0)
+	                	{
+		                	alert("Filter 1 of "+regresult.length+": "+regresult[0]);
+	                	}else{
+	                		alert("No filter found");
+	                	}
+					},
+					failCallback: function (regresult){
+						console.warn("error during GetTagFilters: "+ regresult);
+						alert("error during GetTagFilters: "+ regresult);
+					}
+				});
+		}
+		
+		function registerCurrentPosition(){
+			console.log("RegisterCurrentPosition");
+			Puship.Common.RegisterCurrentPosition(
+					{
+					successCallback: function (regresult){
+		                console.log("Position registration done");
+					},
+					failCallback: function (regresult){
+						console.warn("Position registration error: "+ regresult);
+					}
+				});
+		}
+	</script>
+</head>
+<body>
+<h1>Puship</h1>
+<p>This application is only created for puship service demostration.</p>
+<p>Go to <a href="http://puship.com/?page_id=35" >Puship administration panel</a> for send push notification to this application,</p>
+<button onclick="getPush()">Get Last Push</button>
+<button onclick="getPushByCurrentPosition()">Get Last Push by current position</button>
+<button onclick="getPushByLibra()">Get Last Push by tag Libra</button>
+<button onclick="getPushByDevice()">Get Last Push by current device</button>
+<button onclick="addLibraFilter()">Add Libra filter</button>
+<button onclick="addVirgoFilter()">Add Virgo filter</button>
+<button onclick="removeFilter()">Remove Libra filter</button>
+<button onclick="clearFilters()">Clear filters</button>
+<button onclick="getFilters()">Get filters</button>
+<button onclick="registerCurrentPosition()">Register position</button>
+</body>
+</html>
